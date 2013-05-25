@@ -54,7 +54,7 @@ setup (
                'genericfunctions decorator backport',
     platforms = ['any'],
     license = 'MIT',
-    py_modules = ('singledispatch',),
+    py_modules = ('singledispatch', 'singledispatch_helpers'),
     zip_safe = True,
     install_requires = [
         'six',

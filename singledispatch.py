@@ -8,11 +8,9 @@ from __future__ import unicode_literals
 
 __all__ = ['singledispatch']
 
-from abc import get_cache_token
 from functools import update_wrapper
-from types import MappingProxyType
 from weakref import WeakKeyDictionary
-
+from singledispatch_helpers import MappingProxyType, get_cache_token
 
 ################################################################################
 ### singledispatch() - single-dispatch generic function decorator

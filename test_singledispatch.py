@@ -10,6 +10,7 @@ import collections
 import decimal
 from itertools import permutations
 import singledispatch as functools
+from singledispatch_helpers import ChainMap
 import unittest
 
 
@@ -102,8 +103,8 @@ class TestSingleDispatch(unittest.TestCase):
             self.assertEqual(m, [dict, c.MutableMapping, c.Mapping, object])
         bases = [c.Container, c.Mapping, c.MutableMapping, c.OrderedDict]
         for haystack in permutations(bases):
-            m = mro(c.ChainMap, haystack)
-            self.assertEqual(m, [c.ChainMap, c.MutableMapping, c.Mapping,
+            m = mro(ChainMap, haystack)
+            self.assertEqual(m, [ChainMap, c.MutableMapping, c.Mapping,
                                  c.Sized, c.Iterable, c.Container, object])
         # Note: The MRO order below depends on haystack ordering.
         m = mro(c.defaultdict, [c.Sized, c.Container, str])
@@ -138,7 +139,7 @@ class TestSingleDispatch(unittest.TestCase):
         self.assertEqual(g(s), "sized")
         self.assertEqual(g(f), "sized")
         self.assertEqual(g(t), "sized")
-        g.register(c.ChainMap, lambda obj: "chainmap")
+        g.register(ChainMap, lambda obj: "chainmap")
         self.assertEqual(g(d), "mutablemapping")  # irrelevant ABCs registered
         self.assertEqual(g(l), "sized")
         self.assertEqual(g(s), "sized")
