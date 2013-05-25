@@ -41,6 +41,10 @@ with codecs.open(
 # We let it die a horrible tracebacking death if reading the file fails.
 # We couldn't sensibly recover anyway: we need the long description.
 
+install_requires = ['six']
+if sys.version_info[:2] < (2, 7):
+    install_requires.append('ordereddict')
+
 setup (
     name = 'singledispatch',
     version = '3.4.0.0',
@@ -56,9 +60,7 @@ setup (
     license = 'MIT',
     py_modules = ('singledispatch', 'singledispatch_helpers'),
     zip_safe = True,
-    install_requires = [
-        'six',
-    ],
+    install_requires = install_requires,
     classifiers = [
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',

@@ -47,7 +47,8 @@ def singledispatch(func):
     """
     registry = {}
     dispatch_cache = WeakKeyDictionary()
-    cache_token = None
+    def ns(): pass
+    ns.cache_token = None
 
     def dispatch(cls):
         """generic_func.dispatch(type) -> <function implementation>
@@ -56,7 +57,7 @@ def singledispatch(func):
         for the given `type` registered on `generic_func`.
 
         """
-        if cache_token is not None:
+        if ns.cache_token is not None:
             mro = _compose_mro(cls, registry.keys())
             match = None
             for t in mro:
@@ -68,7 +69,7 @@ def singledispatch(func):
                                   and match not in cls.__mro__):
                     # `match` is an ABC but there is another unrelated, equally
                     # matching ABC. Refuse the temptation to guess.
-                    raise RuntimeError("Ambiguous dispatch: {} or {}".format(
+                    raise RuntimeError("Ambiguous dispatch: {0} or {1}".format(
                         match, t))
                 return registry[match]
         else:
@@ -78,12 +79,11 @@ def singledispatch(func):
         return func
 
     def wrapper(*args, **kw):
-        nonlocal cache_token
-        if cache_token is not None:
+        if ns.cache_token is not None:
             current_token = get_cache_token()
-            if cache_token != current_token:
+            if ns.cache_token != current_token:
                 dispatch_cache.clear()
-                cache_token = current_token
+                ns.cache_token = current_token
         cls = args[0].__class__
         try:
             impl = dispatch_cache[cls]
@@ -97,12 +97,11 @@ def singledispatch(func):
         Registers a new overload for the given `type` on a `generic_func`.
 
         """
-        nonlocal cache_token
         if func is None:
             return lambda f: register(typ, f)
         registry[typ] = func
-        if cache_token is None and hasattr(typ, '__abstractmethods__'):
-            cache_token = get_cache_token()
+        if ns.cache_token is None and hasattr(typ, '__abstractmethods__'):
+            ns.cache_token = get_cache_token()
         dispatch_cache.clear()
         return func
 

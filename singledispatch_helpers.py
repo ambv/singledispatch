@@ -7,7 +7,15 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from abc import ABCMeta
-from collections import MutableMapping, UserDict
+from collections import MutableMapping
+try:
+    from collections import UserDict
+except ImportError:
+    from UserDict import UserDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 try:
     from thread import get_ident
 except ImportError:
@@ -142,7 +150,7 @@ class ChainMap(MutableMapping):
 
 class MappingProxyType(UserDict):
     def __init__(self, data):
-        super(MappingProxyType, self).__init__()
+        UserDict.__init__(self)
         self.data = data
 
 

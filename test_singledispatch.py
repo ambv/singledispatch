@@ -10,8 +10,11 @@ import collections
 import decimal
 from itertools import permutations
 import singledispatch as functools
-from singledispatch_helpers import ChainMap
-import unittest
+from singledispatch_helpers import ChainMap, OrderedDict
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 
 class TestSingleDispatch(unittest.TestCase):
@@ -30,7 +33,7 @@ class TestSingleDispatch(unittest.TestCase):
         @functools.singledispatch
         def g(obj):
             return "base"
-        class C:
+        class C(object):
             pass
         class D(C):
             pass
@@ -44,7 +47,7 @@ class TestSingleDispatch(unittest.TestCase):
         @functools.singledispatch
         def g(obj):
             return "base"
-        class C:
+        class C(object):
             pass
         class D(C):
             pass
@@ -101,7 +104,7 @@ class TestSingleDispatch(unittest.TestCase):
         for haystack in permutations(bases):
             m = mro(dict, haystack)
             self.assertEqual(m, [dict, c.MutableMapping, c.Mapping, object])
-        bases = [c.Container, c.Mapping, c.MutableMapping, c.OrderedDict]
+        bases = [c.Container, c.Mapping, c.MutableMapping, OrderedDict]
         for haystack in permutations(bases):
             m = mro(ChainMap, haystack)
             self.assertEqual(m, [ChainMap, c.MutableMapping, c.Mapping,
@@ -116,7 +119,7 @@ class TestSingleDispatch(unittest.TestCase):
         c = collections
         d = {"a": "b"}
         l = [1, 2, 3]
-        s = {object(), None}
+        s = set([object(), None])
         f = frozenset(s)
         t = (1, 2, 3)
         @functools.singledispatch
@@ -229,7 +232,7 @@ class TestSingleDispatch(unittest.TestCase):
         c.Container.register(O)
         self.assertEqual(g(o), "sized")   # see above: Sized is in __mro__
 
-        class P:
+        class P(object):
             pass
 
         p = P()
@@ -259,10 +262,13 @@ class TestSingleDispatch(unittest.TestCase):
                                           # __mro__
 
     def test_cache_invalidation(self):
-        from collections import UserDict
+        try:
+            from collections import UserDict
+        except ImportError:
+            from UserDict import UserDict
         class TracingDict(UserDict):
             def __init__(self, *args, **kwargs):
-                super(TracingDict, self).__init__(*args, **kwargs)
+                UserDict.__init__(self, *args, **kwargs)
                 self.set_ops = []
                 self.get_ops = []
             def __getitem__(self, key):
@@ -313,7 +319,7 @@ class TestSingleDispatch(unittest.TestCase):
         self.assertEqual(td.get_ops, [list, dict])
         self.assertEqual(td.set_ops, [dict, list, dict, list])
         self.assertEqual(td.data[list], g.dispatch(list))
-        class X:
+        class X(object):
             pass
         c.MutableMapping.register(X)   # Will not invalidate the cache,
                                        # not using ABCs yet.
