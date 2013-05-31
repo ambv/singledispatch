@@ -145,6 +145,24 @@ members of the core CPython team:
 Change Log
 ----------
 
+3.4.0.1
+~~~~~~~
+
+Updated to the reference implementation as of 31-May-2013.
+
+* better performance
+
+* fixed a corner case with PEP 435 enums
+
+* calls to `dispatch()` also cached
+
+* dispatching algorithm now now a module-level routine called `_find_impl()`
+  with a simplified implementation and proper documentation
+
+* `dispatch()` now handles all caching-related activities
+
+* terminology more consistent: "overload" -> "implementation"
+
 3.4.0.0
 ~~~~~~~
 

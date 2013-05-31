@@ -47,7 +47,7 @@ if sys.version_info[:2] < (2, 7):
 
 setup (
     name = 'singledispatch',
-    version = '3.4.0.0',
+    version = '3.4.0.1',
     author = 'Łukasz Langa',
     author_email = 'lukasz@langa.pl',
     description = __doc__,
