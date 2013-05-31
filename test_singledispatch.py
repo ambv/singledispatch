@@ -307,12 +307,14 @@ class TestSingleDispatch(unittest.TestCase):
         self.assertEqual(len(td), 1)
         self.assertEqual(td.get_ops, [list, dict])
         self.assertEqual(td.set_ops, [dict, list, dict])
-        self.assertEqual(td.data[dict], g.dispatch(dict))
+        self.assertEqual(td.data[dict],
+                         functools._find_impl(dict, g.registry))
         self.assertEqual(g(l), "list")
         self.assertEqual(len(td), 2)
         self.assertEqual(td.get_ops, [list, dict])
         self.assertEqual(td.set_ops, [dict, list, dict, list])
-        self.assertEqual(td.data[list], g.dispatch(list))
+        self.assertEqual(td.data[list],
+                         functools._find_impl(list, g.registry))
         class X:
             pass
         c.MutableMapping.register(X)   # Will not invalidate the cache,
@@ -335,6 +337,11 @@ class TestSingleDispatch(unittest.TestCase):
         self.assertEqual(g(d), "sized")
         self.assertEqual(td.get_ops, [list, dict, dict, list, list, dict])
         self.assertEqual(td.set_ops, [dict, list, dict, list, dict, list])
+        g.dispatch(list)
+        g.dispatch(dict)
+        self.assertEqual(td.get_ops, [list, dict, dict, list, list, dict,
+                                      list, dict])
+        self.assertEqual(td.set_ops, [dict, list, dict, list, dict, list])
         c.MutableSet.register(X)       # Will invalidate the cache.
         self.assertEqual(len(td), 2)   # Stale cache.
         self.assertEqual(g(l), "list")
@@ -348,6 +355,8 @@ class TestSingleDispatch(unittest.TestCase):
         g.register(dict, lambda arg: "dict")
         self.assertEqual(g(d), "dict")
         self.assertEqual(g(l), "list")
+        g._clear_cache()
+        self.assertEqual(len(td), 0)
         functools.WeakKeyDictionary = _orig_wkd
 
 
