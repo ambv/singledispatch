@@ -21,8 +21,9 @@ argument, create your function accordingly::
   ...     print(arg)
 
 To add overloaded implementations to the function, use the
-``register()`` attribute of the generic function. It takes a type
-parameter::
+``register()`` attribute of the generic function. It is a decorator,
+taking a type parameter and decorating a function implementing the
+operation for that type::
 
   >>> @fun.register(int)
   ... def _(arg, verbose=False):
@@ -59,7 +60,8 @@ each variant independently::
   >>> fun_num is fun
   False
 
-When called, the generic function dispatches on the first argument::
+When called, the generic function dispatches on the type of the first
+argument::
 
   >>> fun("Hello, world.")
   Hello, world.
@@ -78,15 +80,21 @@ When called, the generic function dispatches on the first argument::
   >>> fun(1.23)
   0.615
 
-To get the implementation for a specific type, use the ``dispatch()``
-attribute::
+Where there is no registered implementation for a specific type, its
+method resolution order is used to find a more generic implementation.
+The original function decorated with ``@singledispatch`` is registered
+for the base ``object`` type, which means it is used if no better
+implementation is found.
+
+To check which implementation will the generic function choose for
+a given type, use the ``dispatch()`` attribute::
 
   >>> fun.dispatch(float)
-  <function fun_num at 0x104319058>
-  >>> fun.dispatch(dict)
-  <function fun at 0x103fe4788>
+  <function fun_num at 0x1035a2840>
+  >>> fun.dispatch(dict)    # note: default implementation
+  <function fun at 0x103fe0000>
 
-To access all registered overloads, use the read-only ``registry``
+To access all registered implementations, use the read-only ``registry``
 attribute::
 
   >>> fun.registry.keys()
@@ -96,7 +104,7 @@ attribute::
   >>> fun.registry[float]
   <function fun_num at 0x1035a2840>
   >>> fun.registry[object]
-  <function fun at 0x103170788>
+  <function fun at 0x103fe0000>
 
 The vanilla documentation is available at
 http://docs.python.org/3/library/functools.html#functools.singledispatch.
