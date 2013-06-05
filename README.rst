@@ -13,7 +13,7 @@ To define a generic function, decorate it with the ``@singledispatch``
 decorator. Note that the dispatch happens on the type of the first
 argument, create your function accordingly::
 
-  >>> from functools import singledispatch
+  >>> from singledispatch import singledispatch
   >>> @singledispatch
   ... def fun(arg, verbose=False):
   ...     if verbose:
