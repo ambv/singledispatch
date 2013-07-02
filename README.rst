@@ -13,7 +13,7 @@ To define a generic function, decorate it with the ``@singledispatch``
 decorator. Note that the dispatch happens on the type of the first
 argument, create your function accordingly::
 
-  >>> from functools import singledispatch
+  >>> from singledispatch import singledispatch
   >>> @singledispatch
   ... def fun(arg, verbose=False):
   ...     if verbose:
@@ -144,6 +144,41 @@ members of the core CPython team:
 
 Change Log
 ----------
+
+3.4.0.2
+~~~~~~~
+
+Updated to the reference implementation as of 02-July-2013.
+
+* more predictable dispatch order when abstract base classes are in use:
+  abstract base classes are now inserted into the MRO of the argument's
+  class where their functionality is introduced, i.e. issubclass(cls,
+  abc) returns True for the class itself but returns False for all its
+  direct base classes. Implicit ABCs for a given class (either
+  registered or inferred from the presence of a special method like
+  __len__) are inserted directly after the last ABC explicitly listed in
+  the MRO of said class. This also means there are less "ambiguous
+  dispatch" exceptions raised.
+
+* better test coverage and improved docstrings
+
+3.4.0.1
+~~~~~~~
+
+Updated to the reference implementation as of 31-May-2013.
+
+* better performance
+
+* fixed a corner case with PEP 435 enums
+
+* calls to `dispatch()` also cached
+
+* dispatching algorithm now now a module-level routine called `_find_impl()`
+  with a simplified implementation and proper documentation
+
+* `dispatch()` now handles all caching-related activities
+
+* terminology more consistent: "overload" -> "implementation"
 
 3.4.0.0
 ~~~~~~~

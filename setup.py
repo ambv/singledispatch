@@ -43,7 +43,7 @@ with codecs.open(
 
 setup (
     name = 'singledispatch',
-    version = '3.4.0.0',
+    version = '3.4.0.2',
     author = 'Łukasz Langa',
     author_email = 'lukasz@langa.pl',
     description = __doc__,
