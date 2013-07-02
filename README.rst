@@ -145,6 +145,23 @@ members of the core CPython team:
 Change Log
 ----------
 
+3.4.0.2
+~~~~~~~
+
+Updated to the reference implementation as of 02-July-2013.
+
+* more predictable dispatch order when abstract base classes are in use:
+  abstract base classes are now inserted into the MRO of the argument's
+  class where their functionality is introduced, i.e. issubclass(cls,
+  abc) returns True for the class itself but returns False for all its
+  direct base classes. Implicit ABCs for a given class (either
+  registered or inferred from the presence of a special method like
+  __len__) are inserted directly after the last ABC explicitly listed in
+  the MRO of said class. This also means there are less "ambiguous
+  dispatch" exceptions raised.
+
+* better test coverage and improved docstrings
+
 3.4.0.1
 ~~~~~~~
 

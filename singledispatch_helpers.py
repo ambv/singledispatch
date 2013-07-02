@@ -8,6 +8,7 @@ from __future__ import unicode_literals
 
 from abc import ABCMeta
 from collections import MutableMapping
+import sys
 try:
     from collections import UserDict
 except ImportError:
@@ -156,3 +157,14 @@ class MappingProxyType(UserDict):
 
 def get_cache_token():
     return ABCMeta._abc_invalidation_counter
+
+
+
+class Support(object):
+    def dummy(self):
+        pass
+
+    def cpython_only(self, func):
+        if 'PyPy' in sys.version:
+            return self.dummy
+        return func
