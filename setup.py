@@ -30,10 +30,6 @@ from setuptools import setup, find_packages
 
 PY3 = sys.version_info[0] == 3
 
-if not PY3:
-    reload(sys)
-    sys.setdefaultencoding('utf8')
-
 with codecs.open(
     os.path.join(os.path.dirname(__file__), 'README.rst'), 'r', 'utf8',
 ) as ld_file:
