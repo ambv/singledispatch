@@ -2,6 +2,9 @@
 singledispatch
 ==============
 
+.. image:: https://secure.travis-ci.org/ambv/singledispatch.png
+  :target: https://secure.travis-ci.org/ambv/singledispatch
+
 `PEP 443 <http://www.python.org/dev/peps/pep-0443/>`_ proposed to expose
 a mechanism in the ``functools`` standard library module in Python 3.4
 that provides a simple form of generic programming known as
@@ -144,6 +147,12 @@ members of the core CPython team:
 
 Change Log
 ----------
+
+3.4.0.3
+~~~~~~~
+
+Should now install flawlessly on PyPy as well. Thanks to Ryan Petrello
+for finding and fixing the ``setup.py`` issue.
 
 3.4.0.2
 ~~~~~~~

@@ -4,7 +4,7 @@
 """This library brings functools.singledispatch from Python 3.4 to Python 2.6-3.3."""
 
 # Copyright (C) 2013 by Łukasz Langa
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -26,9 +26,7 @@
 import os
 import sys
 import codecs
-from setuptools import setup, find_packages
-
-PY3 = sys.version_info[0] == 3
+from setuptools import setup
 
 with codecs.open(
     os.path.join(os.path.dirname(__file__), 'README.rst'), 'r', 'utf8',
@@ -43,7 +41,7 @@ if sys.version_info[:2] < (2, 7):
 
 setup (
     name = 'singledispatch',
-    version = '3.4.0.2',
+    version = '3.4.0.3',
     author = 'Łukasz Langa',
     author_email = 'lukasz@langa.pl',
     description = __doc__,
@@ -70,6 +68,7 @@ setup (
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ]
